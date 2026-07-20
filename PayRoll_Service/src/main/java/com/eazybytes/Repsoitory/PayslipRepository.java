@@ -1,0 +1,19 @@
+package com.eazybytes.Repsoitory;
+
+import com.eazybytes.Entity.Payslip;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface PayslipRepository extends JpaRepository<Payslip,Long> {
+
+    List<Payslip> findByEmployeeId(Long employeeId);
+
+    Optional<Payslip> findByEmployeeIdAndMonthAndYear(
+            Long employeeId,
+            Integer month,
+            Integer year);
+}
