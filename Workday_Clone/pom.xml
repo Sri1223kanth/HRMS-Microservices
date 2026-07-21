@@ -27,6 +27,11 @@
         <spring-cloud.version>2024.0.1</spring-cloud.version>
     </properties>
 
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+
     <!-- Dependencies -->
     <dependencies>
 
