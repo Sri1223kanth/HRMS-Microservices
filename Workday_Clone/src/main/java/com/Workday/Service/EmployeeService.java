@@ -1,12 +1,13 @@
 package com.Workday.Service;
 
 import com.Workday.Entity.Employee;
+import com.Workday.Kafka.EmployeeProducer;
 import com.Workday.Repsoitory.EmployeeRepository;
+import com.Workday.dto.EmployeeCreatedEvent;
 import com.Workday.dto.EmployeeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,26 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    private final EmployeeProducer employeeProducer;
+
 
     public Employee createEmployee(Employee employee) {
-       return  employeeRepository.save(employee);
+       Employee savedEmployee =  employeeRepository.save(employee);
+
+        EmployeeCreatedEvent event = new EmployeeCreatedEvent(
+                savedEmployee.getId(),
+                savedEmployee.getName(),
+                savedEmployee.getEmail(),
+                savedEmployee.getPhoneNumber(),
+                savedEmployee.getJobTitle(),
+                savedEmployee.getDateOfJoining(),
+                savedEmployee.getStatus()
+
+        );
+
+        employeeProducer.publishEmployee(event);
+
+        return savedEmployee;
 
     }
 
